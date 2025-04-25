@@ -23,8 +23,11 @@ Se han definido las siguiente categorías de palabras para formar oraciones:
  - Sustantivos comunes (mamá, casa, perro…)
  - Verbos en primera persona (amo, estudio, veo…)
  - Conectores (y, pero, porque…)
+ - Preposiciones (en, sobre, con)
+ - Adverbios (siempre, nunca, lentamente)
+ - Adjetivos (grande, bonita, feo)
 
 Con estas palabras podemos generar oraciones como:
- 1. ```ya lyublyu sobaku``` → yo amo al perro
- 2. ```ty i ya uchus’ v shkole``` → tú y yo estudiamos en la escuela
- 3. ```ona lyubit kotov, no ya khochu sobaku``` → ella ama a los gatos, pero yo quiero un perro
+ 1. ```ya lyublyu sobaka``` → yo amo al perro
+ 2. ```ya umnyy no ty tozhe``` → Yo soy inteligente pero tú también
+ 3. ```ona krasivaya i segodnya vizhu sobaka``` → Ella es hermosa y hoy veo un perro
