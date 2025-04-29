@@ -129,24 +129,108 @@ OracionConector -> Sujeto Conector |
 
 OracionAdjetivo -> Sujeto Adjetivo AdjT
 
-AdjT -> Continuacion | ε
+AdjT -> VP | ε
 
-Continuacion -> VP | Oracion ST
-
-VP -> 	Verbo VPT |
+VP -> 	VP Sustantivo |
+	VP Preposicion Sustantivo |
 	Adverbio Verbo VPT
 
-VPT -> Sustantivo | Preposicion Sustantivo | ε
-
 Sustantivo -> 	Adjetivo Sustantivo |
-		Sustantivo Conector |
+		Sustantivo Conector
 
-ST -> Conector Oracion ST | ε
+ST -> Conector Oracion ST | ε 
 ```
+NOTA: se cambio  ```Conector -> Conector VP | Conector S``` por ```ST -> Conector Oracion ST | ε``` es una manera más sencilla de hacer que la oración puede terminar con **otra oracion completa** o en **ε**
 
 Sin embargo la gramatica sigue teniendo problemas para que sea considerado un LL(1) ya que aún existe recursión izquierda en ciertas producciones
 
 ## Eliminación de Recursión Izquierda
-Revisando la gramatica encontre recursión izquierda en los siguientes apartados:
-1. 
-```python```
+Revisando la gramatica anterior encontre recursión izquierda en los siguientes apartados:
+1. En la definición de conector
+```python
+**Conector** -> Conector VP | **Conector S**
+```
+2. En la definición de VP
+```python
+**VP** -> **VP** Sustantivo |
+	  **VP** Preposicion Sustantivo |
+	    ...
+```
+3. Dentro de la definición de Sustantivo
+```python
+**Sustantivo** -> Adjetivo Sustantivo |
+		  **Sustantivo* Conector
+```
+Para resolver estos problemas, se reestructuro la gramática de la siguiente manera, eliminando las recursiones izquierdas encontradas
+```python
+S -> Oracion ST
+
+Oracion -> 	OracionAdjetivo | 
+		OracionConector | 
+		Sujeto VP | 
+		VP
+
+OracionAdjetivo -> Sujeto Adjetivo AdjT
+
+AdjT -> VP | ε
+
+OracionConector -> Sujeto Conector | Sujeto Adjetivo Conector
+
+VP -> Verbo VPT | Adverbio Verbo VPT
+
+VPT -> Sustantivo | Preposicion Sustantivo |  ε
+
+ST -> Conector Oracion ST |  ε
+ 
+Sustantivo -> Adjetivo Sustantivo1
+
+Sustantivo1 -> Conector Adjetivo Sustantivo' |  ε
+```
+
+## Pruebas
+
+Ya que la gramática no cuenta con ambiguedad y recursión izquierda, procederemos a probarla. Para ello, utilizaremos la biblioteca **(NLTK)** es una biblioteca ampliamente utilizada para el procesamiento de lenguaje natural en Python, el cual nos ayudara a validar la gramática de manera rápida.
+
+Dentro de este repositorio esta el archivo ```gramatica mejorada.py``` para poder ejecutarlo solo tienes que intalar NLTK con ```pip install nltk```
+
+A continuación se presentan ejemplos de frases que **son aceptadas** y **no son aceptadas** por la gramática desarrollada.
+
+### 5 Ejemplos aceptados por la gramática
+
+1. *Sujeto + Verbo + Sustantivo* -> **```ona vizhu kot```** -> ella ve un gato
+2. *Sujeto + Adverbio + Verbo + Sustantivo* -> **```ona bystro vizhu kot```** -> ella rápidamente ve un gato
+3. *Dos oraciones simples unidas por conector* -> **```ty lyublyu papa i ya khochu sobaka```** -> tú amas al papá y yo quiero un perro
+4. *Sujeto + Adjetivo + Verbo + Sustantivo* -> **```ya krasivaya lyublyu kot```** -> yo (que soy hermoso) amo un gato
+5. *Oración compleja con adjetivo, adverbio y conector* -> **```ona umnyy bystro vizhu sobaka no my khochu dom```** -> ella inteligente ve rápidamente al perro pero nosotros queremos una casa
+
+### Ejemplos no aceptados por la gramática
+
+1. **```ona i kot```** -> ella y el gato -> falta verbo; no basta conectar dos sustantivos sin acción
+2. **```bystro krasivaya sobaka```** -> rápidamente hermoso perro -> orden incorrecto: adverbio antes de adjetivo
+3. **```ya papa i mama```** -> yo papá y mamá ->falta verbo para unir sujeto y sustantivos
+4. **```lyublyu ya dom```** -> amo yo casa -> el verbo aparece antes del sujeto; estructura incorrecta
+5. **```dom i ya uchus'```** -> la casa y yo estudio -> sujeto compuesto mal estructurado
+
+### Explicación rápida del patrón de frases aceptadas
+
+Las frases válidas en esta gramática respetan los siguientes patrones:
+
+- Siguen una estructura tipo: **Sujeto + (Adjetivo) + (Adverbio) + Verbo + (Preposición) + Sustantivo**.
+- Pueden unir varias oraciones usando **conectores** como `i`, `no`, `potomu_chto`, entre otros.
+- Admiten secuencias de **adjetivo + sustantivo** siempre que mantengan el orden correcto.
+
+Aquí estan algunos ejemplos de la generación de algunos de los arboles
+
+**```ona i kot```**
+
+![image](https://github.com/user-attachments/assets/4d78e61c-0851-4115-b9eb-b363908a1651)
+
+**```ty lyublyu papa i ya khochu sobaka```**
+
+![image](https://github.com/user-attachments/assets/d70c1b12-c928-4aed-a92b-0f7cecc45230)
+
+**```ona umnyy bystro vizhu sobaka no my khochu dom```**
+
+![image](https://github.com/user-attachments/assets/123c3eb9-cc0a-43f5-b233-159c0ce21a32)
+
+## Analisis
