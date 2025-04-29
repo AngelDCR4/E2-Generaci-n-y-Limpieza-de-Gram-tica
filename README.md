@@ -93,11 +93,60 @@ Esta gramática inicial permite generar **oraciones simples y compuestas** en ru
 Estos problemas impiden que la gramática sea compatible con un analizador **LL(1)**, por lo que fue necesario realizar procesos de **limpieza y reestructuración** para adaptarla.
 
 ## Eliminación de ambiguedad
-Encontre tres principales problemas con la gramatica inicial y son
-1. En conector se define dos veces que una oración puede iniciar con un verbo
-Conector -> 
-Conector -> 
-3. El adverbio se define dos veces al inicio de una oración
-   S -> Adverbio Oracion
-   VP -> Adverbio  
-5. La clase Oración repite la misma secuencia de Sujeto Adjetivo
+
+Durante la revisión de la gramática inicial, se detectaron tres principales problemas que provocaban ambigüedad:
+
+1. Se definia en conector dos caminos posibles en la que una oración puede iniciar con un ```verbo```
+```python
+Conector -> Conector S -> Oracion -> VP (Verbo)
+Conector -> Conector VP (Verbo)
+```
+2. El ```Adverbio``` se define en dos caminos posibles al inicio de una oración
+```python
+   S -> Adverbio Oracion -> Oracion -> VP
+   VP -> Adverbio VP ...
+```
+3. La clase Oración repite la misma secuencia para ```Sujeto Adjetivo```
+```python
+Oracion ->	Sujeto VP |
+		Sujeto Conector |
+		Sujeto Adjetivo |
+		Sujeto Adjetivo VP |
+		Sujeto Adjetivo Conector |
+```
+
+Para resolver estos problemas, se reestructuró la gramática de la siguiente forma, agrupando de manera ordenada las opciones y eliminando definiciones redundantes:
+```python
+S -> Oracion ST
+
+Oracion -> OracionAdjetivo |
+	   OracionConector |
+	   Sujeto VP |
+	   VP
+
+OracionConector -> Sujeto Conector |
+		   Sujeto Adjetivo Conector 
+
+OracionAdjetivo -> Sujeto Adjetivo AdjT
+
+AdjT -> Continuacion | ε
+
+Continuacion -> VP | Oracion ST
+
+VP -> 	Verbo VPT |
+	Adverbio Verbo VPT
+
+VPT -> Sustantivo | Preposicion Sustantivo | ε
+
+Sustantivo -> 	Adjetivo Sustantivo |
+		Sustantivo Conector |
+
+ST -> Conector Oracion ST | ε
+```
+
+Sin embargo la gramatica sigue teniendo problemas para que sea considerado un LL(1) ya que aún existe recursión izquierda en ciertas producciones
+
+## Eliminación de Recursión Izquierda
+Revisando la gramatica encontre recursión izquierda en los siguientes apartados:
+1. 
+```python```
