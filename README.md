@@ -191,7 +191,7 @@ Sustantivo1 -> Conector Adjetivo Sustantivo' |  ε
 
 Ya que la gramática no cuenta con ambiguedad y recursión izquierda, procederemos a probarla. Para ello, utilizaremos la biblioteca **(NLTK)** es una biblioteca ampliamente utilizada para el procesamiento de lenguaje natural en Python, el cual nos ayudara a validar la gramática de manera rápida.
 
-Dentro de este repositorio esta el archivo ```gramatica mejorada.py``` para poder ejecutarlo solo tienes que intalar NLTK con ```pip install nltk```
+Dentro de este repositorio esta el archivo ```pruebasGramatica.py``` el cual hace pruebas de manera automatica para poder ejecutarlo solo tienes que intalar NLTK con ```pip install nltk```, si se desea hacer pruebas con oraciones personalizadas esta el archivo ```gramaticaMejorada.py``` en la cual puede cambiar el valor de la variable oracion
 
 A continuación se presentan ejemplos de frases que **son aceptadas** y **no son aceptadas** por la gramática desarrollada.
 
