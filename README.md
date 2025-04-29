@@ -211,13 +211,13 @@ A continuación se presentan ejemplos de frases que **son aceptadas** y **no son
 4. **```lyublyu ya dom```** -> amo yo casa -> el verbo aparece antes del sujeto; estructura incorrecta
 5. **```dom i ya uchus'```** -> la casa y yo estudio -> sujeto compuesto mal estructurado
 
-### Explicación rápida del patrón de frases aceptadas
+### Patron de frases aceptadas
 
-Las frases válidas en esta gramática respetan los siguientes patrones:
+Las frases validas en esta gramática respetan los siguientes patrones:
 
-- Siguen una estructura tipo: **Sujeto + (Adjetivo) + (Adverbio) + Verbo + (Preposición) + Sustantivo**.
-- Pueden unir varias oraciones usando **conectores** como `i`, `no`, `potomu_chto`, entre otros.
-- Admiten secuencias de **adjetivo + sustantivo** siempre que mantengan el orden correcto.
+#### **Sujeto + (Adjetivo) + (Adverbio) + Verbo + (Preposición) + Sustantivo**.
+Pueden unir varias oraciones usando **conectores** como `i`, `no`, `potomu_chto`, entre otros.
+Admiten secuencias de **adjetivo + sustantivo** siempre que mantengan el orden correcto.
 
 Aquí estan algunos ejemplos de la generación de algunos de los arboles
 
@@ -234,3 +234,27 @@ Aquí estan algunos ejemplos de la generación de algunos de los arboles
 ![image](https://github.com/user-attachments/assets/123c3eb9-cc0a-43f5-b233-159c0ce21a32)
 
 ## Analisis
+
+### Complejidad
+
+### Complejidad Tipo de Gramatica
+
+Antes de eliminar la ambigüedad y la recursividad por la izquierda, la gramática pertenecia al tipo 2 dentro de la jerarquía de Chomsky, es decir, es una gramática sensible al contexto libre (Context-Free Grammar, CFG).
+
+Despues de eliminar la ambigüedad y la recursion izquierda, la gramática es ahora libre de contexto, siendo determinista (Det. CF) De acuerdo a la jerarquía de Chomsky extendida. Esto permite que sea analizada mediante un LL(1), sin retrocesos o distintas derivaciones, mejorando su eficiencia.
+
+## Complejidad de la Gramática
+
+La complejidad de nuestra gramática es de **O(n)**, donde **n** representa la longitud de la oración que se desea realizar.
+
+Esto es gracias a que un LL(1) recorre la entrada de izquierda a derecha una sola vez, leyendo un símbolo a la vez y tomando decisiones de manera constante para cada paso, no necesita retroceder o reevaluar por lo que el tiempo de análisis es lineal, asegurando un procesamiento eficiente sin importar de que las oraciones sean muy largas.
+
+## Referencias
+
+Gaspard. (2022, 1 junio). Las palabras rusas para principiantes que debes aprender. Superprof MX - el Blog de Superprof México. https://www.superprof.mx/blog/palabras-y-expresiones-rusas-basicas/
+
+Castañeda, L. (s. f.). Analizador LL(1). Scribd. https://es.scribd.com/presentation/840594020/Analizador-LL-1
+
+Rdz, D. (s. f.). ELIMINACIÓN DE AMBIGÜEDAD. Scribd. https://es.scribd.com/document/95083970/ELIMINACION-DE-AMBIGUEDAD
+
+GeeksforGeeks. (2024, 18 octubre). Chomsky Hierarchy in Theory of Computation. GeeksforGeeks. https://www.geeksforgeeks.org/chomsky-hierarchy-in-theory-of-computation/
